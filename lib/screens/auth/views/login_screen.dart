@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:test/constants.dart';
 import 'package:test/route/route_constants.dart';
-// import 'components/login_form.dart';
 import 'dart:developer';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http; // Add this dependency in pubspec.yaml
 import 'dart:convert';
 import 'package:test/models/my_user.dart';
 import 'package:test/main.dart';
 
+/// 一個代表應用程式登入畫面的 `StatefulWidget`。
+/// 這個 widget 負責顯示登入介面並處理與登入相關的使用者互動。
+/// `LoginScreen` widget 會創建一個對應的 `_LoginScreenState` 物件來管理其狀態。
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-  //const LoginScreen({Key? key},globalkey:GlobalKey ) : super(key: key);
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // var navigatorKey = GlobalKey<NavigatorState>();
+  // Microsoft Entra ID 的設定
   static final Config config = Config(
     tenant: '3e7e3a11-2a69-4cad-9463-ea92f2fed6c0',
     clientId: 'c6dcb0ea-1509-4d4a-9fe1-0df47e8bb707',
     scope: 'openid profile offline_access User.Read',
-    //scope: 'User.Read',
     redirectUri: "msauth://com.vis.test/%2Frn0m6TJIR79gIT%2BHb%2FZVR1V3%2Bc%3D",
-    // msauth://com.example/%2Frn0m6TJIR79gIT%2BHb%2FZVR1V3%2Bc%3D
-
     navigatorKey: navigatorKey,
     //loader: SizedBox(),
     // appBar: AppBar(
@@ -43,34 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    // config = Config(
-    //   tenant: '3e7e3a11-2a69-4cad-9463-ea92f2fed6c0',
-    //   clientId: 'c6dcb0ea-1509-4d4a-9fe1-0df47e8bb707',
-    //   scope: 'openid profile offline_access User.Read',
-    //   redirectUri: 'msauth://com.vis.test/%2Frn0m6TJIR79gIT%2BHb%2FZVR1V3%2Bc%3D',
-    //   navigatorKey: navigatorKey,
-    //   //webUseRedirect: true,
-    //   //loader: const SizedBox(),
-    //   // appBar: AppBar(
-    //   //   title: const Text('AAD OAuth Demo'),
-    //   // ),
-    //   onPageFinished: (String url) {
-    //     final Uri uri = Uri.parse(url);
-    //     final String? code = uri.queryParameters['code'];
-    //     final String? session_state = uri.queryParameters['session_state'];
-    //     log('code: $code, session_state: $session_state');
-    //     log('onPageFinished: $url');
-    //   },
-    // );
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Image.asset(
-            //   "assets/images/login_dark.png",
-            //   fit: BoxFit.cover,
-            // ),
             Image.asset(
               "assets/images/security.jpeg",
               fit: BoxFit.cover,
@@ -89,15 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     "Microsoft Entra ID offers a secure and reliable way to authenticate your identity. When using Microsoft Entra ID for authentication",
                   ),
                   const SizedBox(height: defaultPadding),
-                  // LogInForm(formKey: _formKey),
-                  // Align(
-                  //   child: TextButton(
-                  //     child: const Text("Forgot password"),
-                  //     onPressed: () {
-                  //       Navigator.pushNamed(context, passwordRecoveryScreenRoute);
-                  //     },
-                  //   ),
-                  // ),
                   SizedBox(
                     height: size.height > 700 ? size.height * 0.02 : defaultPadding,
                   ),
@@ -120,18 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text("Open App Home"),
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     const Text("Don't have an account?"),
-                  //     TextButton(
-                  //       onPressed: () {
-                  //         Navigator.pushNamed(context, signUpScreenRoute);
-                  //       },
-                  //       child: const Text("Sign up"),
-                  //     )
-                  //   ],
-                  // ),
                 ],
               ),
             )

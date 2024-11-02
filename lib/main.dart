@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       /// 在這個例子中，提供了來自 `router` 對象的 `generateRoute` 函數，
       /// 它將根據路由設置處理路由生成邏輯。
       onGenerateRoute: router.generateRoute,
+      // 設定應用程式的初始路由 , 這裡是 onbordingScreenRoute ==  '/onbording'
       initialRoute: onbordingScreenRoute,
       //全局的訪問導航器（Navigator）
       navigatorKey: navigatorKey,
