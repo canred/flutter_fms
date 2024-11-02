@@ -114,8 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ElevatedButton(
                     onPressed: () {
                       // if (_formKey.currentState!.validate()) {
-                      GLOBAL_ASSESS_TOKEN = 'Canred Test';
-                      Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute), arguments: GLOBAL_ASSESS_TOKEN);
+                      GL_access_token = 'Canred Test';
+                      Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute), arguments: GL_access_token);
                       // }
                     },
                     child: const Text("Open App Home"),
@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void login(bool redirect) async {
     config.webUseRedirect = redirect;
     final result = await oauth.login();
-    GLOBAL_ASSESS_TOKEN = result.toString();
+    GL_access_token = result.toString();
     result.fold(
       (l) => showError(l.toString()),
       (r) async => await fetchAzureUserDetails(r.accessToken).then((onValue) => {
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<MyUser?> fetchAzureUserDetails(accessToken) async {
-    GLOBAL_ASSESS_TOKEN = accessToken;
+    GL_access_token = accessToken;
     http.Response response;
     log(accessToken);
     response = await http.get(

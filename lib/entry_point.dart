@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/constants.dart';
 import 'package:test/route/screen_export.dart';
-import 'package:test/main.dart';
+// import 'package:test/main.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});

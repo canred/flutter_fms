@@ -3,9 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:test/components/dot_indicators.dart';
 import 'package:test/constants.dart';
 import 'package:test/route/route_constants.dart';
-
 import 'components/onbording_content.dart';
 
+// 系統的畫面的主要入口點
 class OnBordingScreen extends StatefulWidget {
   const OnBordingScreen({super.key});
 
@@ -17,6 +17,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
   late PageController _pageController;
   int _pageIndex = 0;
   final List<Onbord> _onbordData = [
+    // 以下是要顯示的內容頁面資料
     Onbord(
       image: "assets/images/ic_design_01.jpeg",
       imageDarkTheme: "assets/Illustration/Illustration_darkTheme_0.png",
@@ -30,24 +31,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
     //   description:
     //       "The company aims for sustainable development, emphasizing environmental, social and corporate governance responsibility. It values employees' work-life balance and potential development, and pursues excellence in technology and service.",
     // ),
-    // Onbord(
-    //   image: "assets/Illustration/Illustration-2.png",
-    //   imageDarkTheme: "assets/Illustration/Illustration_darkTheme_2.png",
-    //   title: "Fast & secure \npayment",
-    //   description: "There are many payment options available for your ease.",
-    // ),
-    // Onbord(
-    //   image: "assets/Illustration/Illustration-3.png",
-    //   imageDarkTheme: "assets/Illustration/Illustration_darkTheme_3.png",
-    //   title: "Package tracking",
-    //   description: "In particular, testlon can pack your orders, and help you seamlessly manage your shipments.",
-    // ),
-    // Onbord(
-    //   image: "assets/Illustration/Illustration-4.png",
-    //   imageDarkTheme: "assets/Illustration/Illustration_darkTheme_4.png",
-    //   title: "Nearby stores",
-    //   description: "Easily track nearby tests, browse through their items and get information about their prodcuts.",
-    // ),
+    // ...
   ];
 
   @override

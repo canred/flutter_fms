@@ -28,7 +28,7 @@ class TestForm extends StatelessWidget {
           padding: const EdgeInsets.all(defaultPadding),
           child: TextField(
             decoration: InputDecoration(
-              labelText: GLOBAL_ASSESS_TOKEN,
+              labelText: GL_access_token,
               border: const OutlineInputBorder(),
             ),
           ),
