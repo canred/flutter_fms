@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../constants.dart';
 import 'categories.dart';
 import 'offers_carousel.dart';
@@ -14,9 +13,9 @@ class OffersCarouselAndCategories extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // While loading use 👇
-        // const OffersSkelton(),
+        // 這是一個輪播的廣告
         const OffersCarousel(),
+        // 這是一個分類選單
         const SizedBox(height: defaultPadding / 2),
         Padding(
           padding: const EdgeInsets.all(defaultPadding),

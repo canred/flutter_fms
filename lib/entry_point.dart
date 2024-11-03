@@ -17,13 +17,16 @@ class _EntryPointState extends State<EntryPoint> {
   // 這裡定義了應用程式的各個頁面
   // 使用在底部導覽列中
   final List _pages = const [
+    // 這是收首頁的畫面
     HomeScreen(),
     // DiscoverScreen(),
     // BookmarkScreen(),
     // EmptyCartScreen(), // if Cart is empty
     // CartScreen(),
+    // 使用者的個人資料畫面
     ProfileScreen(),
   ];
+  // 這是目前所選擇的頁面
   int _currentIndex = 0;
 
   @override
@@ -51,16 +54,6 @@ class _EntryPointState extends State<EntryPoint> {
           width: 70,
         ),
         actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, searchScreenRoute);
-          //   },
-          //   icon: SvgPicture.asset(
-          //     "assets/icons/Search.svg",
-          //     height: 24,
-          //     colorFilter: ColorFilter.mode(Theme.of(context).textTheme.bodyLarge!.color!, BlendMode.srcIn),
-          //   ),
-          // ),
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, notificationsScreenRoute);
@@ -69,15 +62,10 @@ class _EntryPointState extends State<EntryPoint> {
               padding: const EdgeInsets.only(top: 8.0), // 設定 padding-top 為 8.0
               child: Image.asset("assets/icons/notification-bell.png", height: 24),
             ),
-            // SvgPicture.asset(
-            //   "assets/icons/Notification.svg",
-            //   height: 24,
-            //   colorFilter: ColorFilter.mode(Theme.of(context).textTheme.bodyLarge!.color!, BlendMode.srcIn),
-            // ),
           ),
         ],
       ),
-      // body: _pages[_currentIndex],
+      // body: _pages[_currentIndex], // 先留下來，之後會用到
       body: PageTransitionSwitcher(
         duration: defaultDuration,
         transitionBuilder: (child, animation, secondAnimation) {

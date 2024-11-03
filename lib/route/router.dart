@@ -45,14 +45,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const DiscoverScreen(),
       );
-    case onSaleScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const OnSaleScreen(),
-      );
-    case kidsScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const KidsScreen(),
-      );
+
     case searchScreenRoute:
       return MaterialPageRoute(
         builder: (context) => const SearchScreen(),
@@ -70,33 +63,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const ProfileScreen(),
       );
-    case userInfoScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const UserInfoScreen(),
-      );
+
     case notificationsScreenRoute:
       return MaterialPageRoute(
         builder: (context) => const NotificationsScreen(),
-      );
-    case noNotificationScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const NoNotificationScreen(),
-      );
-    case enableNotificationScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const EnableNotificationScreen(),
-      );
-    case notificationOptionsScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const NotificationOptionsScreen(),
-      );
-    case addressesScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const AddressesScreen(),
-      );
-    case ordersScreenRoute:
-      return MaterialPageRoute(
-        builder: (context) => const OrdersScreen(),
       );
     case preferencesScreenRoute:
       return MaterialPageRoute(

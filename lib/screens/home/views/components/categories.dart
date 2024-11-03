@@ -21,7 +21,6 @@ List<CategoryModel> demoCategories = [
   CategoryModel(name: "ERP", svgSrc: "assets/icons/Sale.svg", route: onSaleScreenRoute),
   CategoryModel(name: "FAB Monitor", svgSrc: "assets/icons/Man.svg"),
   CategoryModel(name: "Reports", svgSrc: "assets/icons/Woman.svg"),
-  CategoryModel(name: "Others", svgSrc: "assets/icons/Child.svg", route: kidsScreenRoute),
 ];
 // End For Preview
 

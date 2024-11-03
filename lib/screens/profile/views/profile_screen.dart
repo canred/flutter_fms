@@ -91,14 +91,7 @@ class ProfileScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          DividerListTileWithTrilingText(
-            svgSrc: "assets/icons/Notification.svg",
-            title: "Notification",
-            trilingText: "Off",
-            press: () {
-              Navigator.pushNamed(context, enableNotificationScreenRoute);
-            },
-          ),
+
           ProfileMenuListTile(
             text: "Preferences",
             svgSrc: "assets/icons/Preferences.svg",
