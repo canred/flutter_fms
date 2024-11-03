@@ -14,6 +14,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (context) => const OnBordingScreen(),
       );
     case logInScreenRoute:
+      // 處理 '/login' 路由，也就是登入頁面
       return MaterialPageRoute(
         builder: (context) => const LoginScreen(),
       );
@@ -61,6 +62,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (context) => const BookmarkScreen(),
       );
     case entryPointScreenRoute:
+      // 處理 '/entry_point' 路由，這是完成Microsoft Entra Id登入後的應用程式的入口點
       return MaterialPageRoute(
         builder: (context) => const EntryPoint(),
       );

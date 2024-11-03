@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/constants.dart';
 import 'package:test/route/screen_export.dart';
-// import 'package:test/main.dart';
+import 'package:test/main.dart';
 
+// 完成 Microsoft Entra ID 的登入後，將使用者導向應用程式的入口點
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
 
@@ -13,12 +14,14 @@ class EntryPoint extends StatefulWidget {
 }
 
 class _EntryPointState extends State<EntryPoint> {
+  // 這裡定義了應用程式的各個頁面
+  // 使用在底部導覽列中
   final List _pages = const [
     HomeScreen(),
-    //DiscoverScreen(),
-    //BookmarkScreen(),
+    // DiscoverScreen(),
+    // BookmarkScreen(),
     // EmptyCartScreen(), // if Cart is empty
-    //CartScreen(),
+    // CartScreen(),
     ProfileScreen(),
   ];
   int _currentIndex = 0;
@@ -42,19 +45,10 @@ class _EntryPointState extends State<EntryPoint> {
         leading: const SizedBox(),
         leadingWidth: 0,
         centerTitle: false,
-        title:
-            // SvgPicture.asset(
-            //   "assets/vislogosvg.svg",
-            //   colorFilter: ColorFilter.mode(
-            //       Theme.of(context).iconTheme.color!, BlendMode.srcIn),
-            //   height: 20,
-            //   width: 100,
-            // )
-            Image.asset(
+        title: Image.asset(
           "assets/logo/vislogo.png",
           height: 35,
           width: 70,
-          //color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.3),
         ),
         actions: [
           // IconButton(

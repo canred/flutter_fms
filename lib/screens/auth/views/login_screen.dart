@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:test/constants.dart';
 import 'package:test/route/route_constants.dart';
 import 'dart:developer';
-import 'package:aad_oauth/aad_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
-import 'package:http/http.dart' as http; // Add this dependency in pubspec.yaml
-import 'dart:convert';
 import 'package:test/models/my_user.dart';
 import 'package:test/main.dart';
 
@@ -19,26 +15,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Microsoft Entra ID 的設定
-  static final Config config = Config(
-    tenant: '3e7e3a11-2a69-4cad-9463-ea92f2fed6c0',
-    clientId: 'c6dcb0ea-1509-4d4a-9fe1-0df47e8bb707',
-    scope: 'openid profile offline_access User.Read',
-    redirectUri: "msauth://com.vis.test/%2Frn0m6TJIR79gIT%2BHb%2FZVR1V3%2Bc%3D",
-    navigatorKey: navigatorKey,
-    //loader: SizedBox(),
-    // appBar: AppBar(
-    //   title: Text('AAD OAuth Demo'),
-    // ),
-    // onPageFinished: (String url) {
-    //   log('onPageFinished: $url');
-    // },
-  );
-  final AadOAuth oauth = AadOAuth(config);
-  MyUser? myUser;
+  // 用來儲存從 Microsoft Graph API 取得的使用者資料
+  late MyUser? myUser = null;
 
   @override
   Widget build(BuildContext context) {
+    // 取得裝置的螢幕尺寸
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -67,20 +49,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      // 這裡是登入按鈕的事件處理函式
                       login(false);
-                      //if (_formKey.currentState!.validate()) {
-                      //Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute));
-                      //}
                     },
                     child: const Text("Log in with Azure AD"),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      // if (_formKey.currentState!.validate()) {
+                      // FIXME: 這個變量要在正式的環境中刪除
                       GL_access_token = 'Canred Test';
-                      Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute), arguments: GL_access_token);
-                      // }
+                      Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute), arguments: GL_id_token);
                     },
                     child: const Text("Open App Home"),
                   ),
@@ -93,92 +72,69 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void showError(dynamic ex) {
-    showMessage(ex.toString());
-  }
-
-  void showMessage(String text) {
-    var alert = AlertDialog(content: Text(text), actions: <Widget>[
-      TextButton(
-          child: const Text('Ok'),
-          onPressed: () {
-            // Navigator.pop(context);
-          })
-    ]);
-    showDialog(context: context, builder: (BuildContext context) => alert);
-  }
-
+  /// 登入使用者並選擇性地將他們重定向到另一個畫面。
+  /// 此函式執行登入操作，並根據 [redirect] 的值，在成功登入後可能會將使用者導航到不同的畫面。
+  /// [redirect] 決定使用者在登入後是否應該被重定向。
+  /// 如果為 `true`，使用者將被重定向到另一個畫面。
+  /// 如果為 `false`，使用者將留在當前畫面。
+  /// 此函式是異步的，應該等待它完成登入過程後再進行進一步的操作。
   void login(bool redirect) async {
-    config.webUseRedirect = redirect;
+    GL_config.webUseRedirect = redirect;
     final result = await oauth.login();
     GL_access_token = result.toString();
     result.fold(
-      (l) => showError(l.toString()),
-      (r) async => await fetchAzureUserDetails(r.accessToken).then((onValue) => {
-            if (myUser != null)
-              {
-                Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute))
-                // showMessage(onValue),
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => WelcomePage(user: myUser!),
-                //   ),
-                // ),
-              }
-            else
-              {showError("Microsoft Authentication Failed!")}
-          }),
-      //(r) async => showMessage("Microsoft Authentication Success!"),
+      (l) async {
+        Utils.showError(context, l.toString());
+      },
+      (r) async {
+        // 登入完成後，可用在r中取得使用者的資訊
+        // 其中 r.idToken 是用來取得使用者資訊的 token
+        if (r.idToken != null) {
+          log('azure id token:' + (r.idToken ?? ''));
+        }
+        GL_id_token = r.idToken ?? '';
+        if (GL_id_token != '') {
+          Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute));
+        } else {
+          Utils.showError(context, "Microsoft Authentication Failed!");
+        }
+      },
     );
-    var accessToken = await oauth.getAccessToken();
-    if (accessToken != null) {
+
+    // 這裡是登入成功後的提示訊息
+    var _idToken = await oauth.getIdToken();
+    if (_idToken != null) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(accessToken)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('登入成功')));
     }
   }
 
-  Future azureSignInApi(bool redirect) async {
-    final AadOAuth oauth = AadOAuth(config);
+  // // 其他的Case可能會使用到的，這個函式用來從 Microsoft Graph API 取得使用者的資訊
+  // Future<MyUser?> fetchAzureUserDetails(accessToken) async {
+  //   GL_access_token = accessToken;
+  //   http.Response response;
+  //   log(accessToken);
+  //   response = await http.get(
+  //     Uri.parse("https://graph.microsoft.com/v1.0/me"),
+  //     headers: {"Authorization": "Bearer $accessToken"},
+  //   );
 
-    config.webUseRedirect = redirect;
-    final result = await oauth.login();
+  //   dynamic returnValue = json.decode(response.body);
+  //   myUser = MyUser.fromJson(returnValue);
+  //   log(returnValue.toString());
+  //   return myUser;
+  // }
 
-    result.fold(
-      (l) => showError("Microsoft Authentication Failed!"),
-      (r) async {
-        await fetchAzureUserDetails(r.accessToken);
-      },
-    );
-  }
-
-  Future<MyUser?> fetchAzureUserDetails(accessToken) async {
-    GL_access_token = accessToken;
-    http.Response response;
-    log(accessToken);
-    response = await http.get(
-      Uri.parse("https://graph.microsoft.com/v1.0/me"),
-      headers: {"Authorization": "Bearer $accessToken"},
-    );
-
-    dynamic returnValue = json.decode(response.body);
-    myUser = MyUser.fromJson(returnValue);
-    log(returnValue.toString());
-    return myUser;
-  }
-
-  void hasCachedAccountInformation() async {
+  // 這個函式用來檢查是否有緩存的帳戶資訊
+  Future<bool> has_Cached_Account_Information() async {
     var hasCachedAccountInformation = await oauth.hasCachedAccountInformation;
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('HasCachedAccountInformation: $hasCachedAccountInformation'),
-      ),
-    );
+    return hasCachedAccountInformation;
   }
 
+  // 這個函式用來登出
   void logout() async {
     await oauth.logout();
-    showMessage('Logged out');
+    Utils.showMessage(context, 'Logged out');
   }
 }
