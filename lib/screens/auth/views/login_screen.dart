@@ -4,6 +4,10 @@ import 'package:test/route/route_constants.dart';
 import 'dart:developer';
 import 'package:test/models/my_user.dart';
 import 'package:test/main.dart';
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
+
+// 使用 Microsoft Entra ID 的 `AadOAuth` 類別來處理登入
 
 /// 一個代表應用程式登入畫面的 `StatefulWidget`。
 /// 這個 widget 負責顯示登入介面並處理與登入相關的使用者互動。
@@ -17,6 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // 用來儲存從 Microsoft Graph API 取得的使用者資料
   late MyUser? myUser = null;
+  final AadOAuth oauth = AadOAuth(GL_config);
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
   // 這個函式用來登出
   void logout() async {
     await oauth.logout();
-    Utils.showMessage(context, 'Logged out');
+    Utils.showMessage(context, 'Logged out', 'Logout');
   }
 }

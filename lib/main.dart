@@ -6,6 +6,7 @@ import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:http/http.dart' as http; // Add this dependency in pubspec.yaml
 import 'dart:convert';
+import 'package:test/main.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -16,6 +17,7 @@ var GL_access_token = '';
 /// The ID token for the GL (Global) API.
 /// This token is used to identify the user making the API requests.
 var GL_id_token = '';
+var Gl_user_name = '';
 // Microsoft Entra ID 的設定
 final Config GL_config = Config(
     tenant: '3e7e3a11-2a69-4cad-9463-ea92f2fed6c0',
@@ -26,8 +28,8 @@ final Config GL_config = Config(
     onPageFinished: (String url) {
       // 完成頁面加載時的回調函數
     });
-// 使用 Microsoft Entra ID 的 `AadOAuth` 類別來處理登入
-final AadOAuth oauth = AadOAuth(GL_config);
+// // 使用 Microsoft Entra ID 的 `AadOAuth` 類別來處理登入
+// final AadOAuth oauth = AadOAuth(GL_config);
 
 /// Flutter 應用程式的主入口點。
 ///
@@ -69,17 +71,44 @@ class MyApp extends StatelessWidget {
 // FIXME: 這個類別應該放在一個獨立的文件中
 class Utils {
   static void showError(BuildContext context, dynamic ex) {
-    showMessage(context, ex.toString());
+    showMessage(context, ex.toString(), 'Error');
   }
 
-  static void showMessage(BuildContext context, String text) {
-    var alert = AlertDialog(content: Text(text), actions: <Widget>[
-      TextButton(
-          child: const Text('Ok'),
-          onPressed: () {
-            // Navigator.pop(context);
-          })
-    ]);
+  static void showMessage(BuildContext context, String text, String title_text) {
+    var title_widget = Text('提示');
+    if (title_text != '' && title_text != null && title_text == 'Error') {
+      title_widget = Text(
+        title_text,
+        style: TextStyle(
+          fontSize: 18.0, // 設置字體大小為較小
+          color: Colors.red, // 設置字體顏色為紅色
+        ),
+      );
+    } else {
+      title_widget = Text(
+        title_text,
+        style: TextStyle(
+          fontSize: 18.0, // 設置字體大小為較小
+          color: const Color.fromARGB(255, 13, 182, 50), // 設置字體顏色為紅色
+        ),
+      );
+    }
+    var alert = AlertDialog(
+        title: title_widget,
+        content: Text(
+          text,
+          style: TextStyle(
+            fontSize: 12.0, // 設置字體大小為較小
+            color: const Color.fromARGB(255, 87, 33, 236), // 設置字體顏色為紅色
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.pop(context);
+              })
+        ]);
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
 }

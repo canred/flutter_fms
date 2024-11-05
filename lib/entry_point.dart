@@ -29,6 +29,9 @@ class _EntryPointState extends State<EntryPoint> {
   // 這是目前所選擇的頁面
   int _currentIndex = 0;
 
+  // 將 Gl_user_name 定義為狀態變量
+  String _glUserName = Gl_user_name;
+
   @override
   Widget build(BuildContext context) {
     SvgPicture svgIcon(String src, {Color? color}) {
@@ -54,6 +57,7 @@ class _EntryPointState extends State<EntryPoint> {
           width: 70,
         ),
         actions: [
+          Text(_glUserName), // 使用狀態變量
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, notificationsScreenRoute);
@@ -127,5 +131,12 @@ class _EntryPointState extends State<EntryPoint> {
         ),
       ),
     );
+  }
+
+  // 更新 Gl_user_name 的方法
+  void updateUserName(String newUserName) {
+    setState(() {
+      _glUserName = newUserName;
+    });
   }
 }
