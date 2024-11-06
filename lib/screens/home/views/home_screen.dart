@@ -4,18 +4,6 @@ import 'package:test/screens/home/views/components/test_form.dart';
 import 'package:test/screens/home/views/components/test_table.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'components/offer_carousel_and_categories.dart';
-// import 'package:test/main.dart';
-// import 'package:test/components/Banner/S/banner_s_style_1.dart';
-// import 'package:test/components/Banner/S/banner_s_style_5.dart';
-// import 'package:test/constants.dart';
-// import 'package:test/route/screen_export.dart';
-// import 'components/best_sellers.dart';
-// import 'components/flash_sale.dart';
-// import 'components/most_popular.dart';
-// import 'components/popular_products.dart';
-// import 'package:test/main.dart';
-// import 'package:audioplayers/audioplayers.dart';
-// import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AudioPlayer audioPlayer = AudioPlayer();
-    audioPlayer.play(AssetSource('audio/login_success.mp3'));
+    audioPlayer.play(AssetSource('audio/level-up-191997.mp3'));
 
     return const Scaffold(
       body: SafeArea(

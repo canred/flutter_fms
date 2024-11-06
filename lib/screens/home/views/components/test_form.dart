@@ -6,10 +6,21 @@ import '../../../../constants.dart';
 import '../../../../route/route_constants.dart';
 import 'package:test/main.dart';
 
-class TestForm extends StatelessWidget {
-  const TestForm({
-    super.key,
-  });
+class TestForm extends StatefulWidget {
+  const TestForm({super.key});
+
+  @override
+  _TestFormState createState() => _TestFormState();
+}
+
+class _TestFormState extends State<TestForm> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +38,13 @@ class TestForm extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(defaultPadding),
           child: TextField(
+            controller: _controller,
             decoration: InputDecoration(
               labelText: GL_access_token,
               border: const OutlineInputBorder(),
             ),
           ),
         ),
-
-        // While loading use 👇
-        // const ProductsSkelton(),
       ],
     );
   }

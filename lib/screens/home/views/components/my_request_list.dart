@@ -1,22 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:test/components/my_form/my_form_card.dart';
-// import 'package:test/components/product/product_card.dart';
-// import 'package:test/models/product_model.dart';
 import 'package:test/models/my_form_model.dart';
 import 'package:test/route/screen_export.dart';
 import 'package:test/main.dart';
 import '../../../../constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // 添加這行來導入 dart:convert 庫
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
 
-class MyRequestList extends StatelessWidget {
-  const MyRequestList({
-    super.key,
-  });
+class MyRequestList extends StatefulWidget {
+  const MyRequestList({super.key});
+  @override
+  _MyRequestListState createState() => _MyRequestListState();
+}
+
+class _MyRequestListState extends State<MyRequestList> {
+  // 由於這個有使用者登入的功能，所以需要使用 Azure Active Directory (AAD) 的 OAuth 2.0 來進行登入
+  late Config config;
+  late AadOAuth oauth;
+
+  @override
+  void initState() {
+    super.initState();
+    // 讀取 .env 檔案中的設定
+    Utils.loadEnv().then((value) => {
+          config = Config(
+            tenant: dotenv.env['azure_tenant_id']!,
+            clientId: dotenv.env['azure_client_id']!,
+            scope: dotenv.env['azure_aad_scope']!,
+            redirectUri: dotenv.env['azure_redirect_uri']!,
+            navigatorKey: navigatorKey,
+          ),
+          oauth = AadOAuth(config)
+        });
+  }
 
   Future<void> _callApi(BuildContext context) async {
     try {
-      const API_IP = 'https://mobileapi.vis.com.tw/api/validation_id_access';
+      var API_IP = dotenv.env['api_validate_token_uri']!;
       final response = await http.get(
         Uri.parse(API_IP),
         headers: <String, String>{
@@ -29,6 +52,8 @@ class MyRequestList extends StatelessWidget {
           var jsonResponse = jsonDecode(response.body); // 將 response.body 轉換為 JSON 物件
           if (jsonResponse['error'] != null) {
             Utils.showError(context, jsonResponse['error']);
+            Navigator.pushReplacementNamed(context, onbordingScreenRoute);
+
             return;
           } else if (jsonResponse['preferred_username'] != null) {
             Gl_user_name = jsonResponse['preferred_username'];
@@ -98,7 +123,8 @@ class MyRequestList extends StatelessWidget {
                 height: 30, // 設置按鈕的高度
                 child: ElevatedButton(
                   onPressed: () async {
-                    // await oauth.logout();
+                    await oauth.logout();
+                    Navigator.pushReplacementNamed(context, onbordingScreenRoute);
                     // Utils.showMessage(context, 'Logged out', 'Logout');
                     // Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute));
                   },
