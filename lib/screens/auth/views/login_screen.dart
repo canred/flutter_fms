@@ -20,7 +20,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late Config config;
   late AadOAuth oauth;
+  int messageId = 0;
   MyUser? myUser;
+
   @override
   void initState() {
     super.initState();
@@ -63,8 +65,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<bool> _loadEnv() async {
-    await dotenv.load(fileName: "assets/.env");
-    return true;
+    try {
+      await dotenv.load(fileName: "assets/.env");
+      return true;
+    } catch (e) {
+      Utils.showError(context, e.toString());
+      return false;
+    }
   }
 
   @override
@@ -74,9 +81,13 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.asset(
-              "assets/images/security.jpeg",
-              fit: BoxFit.cover,
+            SizedBox(
+              height: size.height / 2, // 設置圖片的高度為螢幕高度的三分之一
+              child: Image.asset(
+                "assets/images/security.jpeg",
+                fit: BoxFit.cover,
+                width: double.infinity, // 確保圖片寬度填滿
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(defaultPadding),
@@ -103,17 +114,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
+                    child: const Text("Open App Home"),
                     onPressed: () {
                       hasCachedAccountInformation().then((hasCache) async {
-                        var aaa = await oauth.getIdToken();
                         if (hasCache) {
-                          Utils.showMessage(context, aaa!, 'hello');
+                          Utils.showMessage_Future(context, 'Cache is available', 'Info');
                         } else {
-                          showError("No Cached Account Information");
+                          Utils.showMessage_Future(context, 'Cache is not available', 'Warming');
+                          // showError("No Cached Account Information");
                         }
                       });
                     },
-                    child: const Text("Open App Home"),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    child: const Text("Open App Home(Test)"),
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(context, entryPointScreenRoute, ModalRoute.withName(logInScreenRoute));
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    child: const Text("notifications test"),
+                    onPressed: () {
+                      // 使用 flutter_local_notifications
+                      messageId++;
+                      Utils.showNotification(context, messageId, '即時股價', '挑空漲停（150）');
+                    },
                   ),
                 ],
               ),
@@ -124,20 +151,20 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void showError(dynamic ex) {
-    showMessage(ex.toString());
-  }
+  // void showError(dynamic ex) {
+  //   showMessage(ex.toString());
+  // }
 
-  void showMessage(String text) {
-    var alert = AlertDialog(content: Text(text), actions: <Widget>[
-      TextButton(
-          child: const Text('Ok'),
-          onPressed: () {
-            // Navigator.pop(context);
-          })
-    ]);
-    showDialog(context: context, builder: (BuildContext context) => alert);
-  }
+  // void showMessage(String text) {
+  //   var alert = AlertDialog(content: Text(text), actions: <Widget>[
+  //     TextButton(
+  //         child: const Text('Ok'),
+  //         onPressed: () {
+  //           // Navigator.pop(context);
+  //         })
+  //   ]);
+  //   showDialog(context: context, builder: (BuildContext context) => alert);
+  // }
 
   void login(bool redirect) async {
     config.webUseRedirect = redirect;
@@ -175,7 +202,9 @@ class _LoginScreenState extends State<LoginScreen> {
     config.webUseRedirect = redirect;
     final result = await oauth.login();
     result.fold(
-      (l) => showError("Microsoft Authentication Failed!"),
+      (l) {
+        Utils.showMessage(context, "Microsoft Authentication Failed!", 'Login Fail');
+      },
       (r) async {
         await fetchAzureUserDetails(r.accessToken);
       },

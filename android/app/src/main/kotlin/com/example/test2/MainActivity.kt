@@ -1,6 +1,6 @@
 package com.vis.test
 import androidx.annotation.NonNull
-import com.microsoft.intune.mam.client.app.MAMApplication;
+
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel

@@ -52,7 +52,16 @@ class _MyRequestListState extends State<MyRequestList> {
           var jsonResponse = jsonDecode(response.body); // 將 response.body 轉換為 JSON 物件
           if (jsonResponse['error'] != null) {
             Utils.showError(context, jsonResponse['error']);
-            Navigator.pushReplacementNamed(context, onbordingScreenRoute);
+            // 這裡是因為 id_token 過期，所以需要重新登入
+            if (jsonResponse['error'] == 'jwt expired') {
+              await oauth.logout();
+              Utils.showMessage_Future(context, '身份職別已經逾期，請再次登入，謝謝。', 'Warming').then((p) {
+                Navigator.pushReplacementNamed(context, logInScreenRoute);
+              });
+            }
+            //Utils.showSnackBar(context, jsonResponse['error']);
+            //scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(jsonResponse['error'])));
+            //Navigator.pushReplacementNamed(context, onbordingScreenRoute);
 
             return;
           } else if (jsonResponse['preferred_username'] != null) {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:test/screens/home/views/components/my_request_list.dart';
 import 'package:test/screens/home/views/components/test_form.dart';
 import 'package:test/screens/home/views/components/test_table.dart';
+import 'package:test/screens/home/views/components/test_fab_monitor.dart';
+import 'package:test/screens/home/views/components/test_fab_monitor2.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'components/offer_carousel_and_categories.dart';
 
@@ -25,7 +27,9 @@ class HomeScreen extends StatelessWidget {
             SliverToBoxAdapter(child: TestForm()),
             // 這是一個自訂的表格，顯示 表格元件
             SliverToBoxAdapter(child: TestTable()),
-            // SliverToBoxAdapter(child: BestSellers()),
+            // 這是一個自訂的組件，顯示 Fab Monitor
+            SliverToBoxAdapter(child: TestFabMonitor()),
+            // SliverToBoxAdapter(child: TestTable2()),
           ],
         ),
       ),
